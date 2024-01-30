@@ -1,0 +1,24 @@
+---
+- name: Add PostgreSQL GPG Key
+  apt_key:
+    url: "http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc"
+    state: present
+
+- name: Add PostgreSQL APT Repository
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main
+    state: present
+
+- name: Install PostgreSQL
+  apt:
+    name: 
+      - "postgresql-{{ postgresql_version }}"
+      - "postgresql-client-{{ postgresql_version }}"
+    state: present
+    update_cache: yes
+
+- name: Ensure the PostgreSQL service is running
+  systemd:
+    name: postgresql
+    state: started
+    enabled: yes

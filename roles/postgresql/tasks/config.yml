@@ -1,0 +1,8 @@
+- name: Configure PostgreSQL parameters using community.postgresql.postgresql_set
+  community.postgresql.postgresql_set:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    ca_cert: /etc/ssl/certs/ssl-cert-snakeoil.pem # если требуется
+  loop: "{{ postgresql_parameters | dict2items }}"
+  become_user: postgres
+  notify: Restart PostgreSQL
